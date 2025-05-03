@@ -1,0 +1,63 @@
+🔹 1. ClusterIP Overview:-
+
+ClusterIP is the default Kubernetes service type.
+
+Used to expose Pods internally within the cluster.
+
+Cannot be accessed from outside the cluster.
+
+Provides a stable virtual IP (ClusterIP) for accessing dynamic sets of Pods.
+
+🔹 2. Key Networking Terms
+
+Term	         Description
+Pod IP	        Unique IP assigned to each Pod. Temporary and not stable.
+ClusterIP	Virtual IP assigned to the service by Kubernetes. Stable and internal.
+Port	        Port exposed by the service to other Pods. Clients use this to connect.
+TargetPort	Port on the Pod/container where the actual application listens.
+
+🔹 3. Traffic Flow
+
+A Service is created with:
+
+A selector to match Pods (e.g., app=backend)
+
+A ClusterIP assigned (e.g., 10.96.0.10)
+
+A service port (e.g., 80)
+
+A targetPort pointing to the container's actual port (e.g., 8080)
+
+Other Pods in the cluster send requests to:
+
+backend-service.default.svc.cluster.local:80
+
+Or 10.96.0.10:80
+
+Kubernetes (via kube-proxy) forwards the request to one of the backend Pods:
+
+E.g., 10.244.1.5:8080, 10.244.1.6:8080
+
+🔹 4. Example YAML
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  selector:
+    app: backend
+  ports:
+    - port: 80          # Service port (ClusterIP)
+    - targetPort: 8080  # Pod/container port
+  type: ClusterIP
+
+
+🔹 5. Important Notes
+DNS name for the service: backend-service.default.svc.cluster.local
+
+Load balancing is done across matching Pods.
+
+No external access unless port-forwarding or another service type is used.
+
+Let me know if you'd like this formatted as a downloadable PDF or flashcards!
