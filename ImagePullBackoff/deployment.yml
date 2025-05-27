@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: shivu27/nginx-image-demo:v1
+        ports:
+        - containerPort: 80
+      imagePullSecrets:
+      - name: demo
+
+# create secrets using this command- 
+# kubectl create secret docker-registry demo --docker-server=https://index.docker.io/v1/ --docker-username=shivu*** --docker-password=**** --docker-email=shga***
